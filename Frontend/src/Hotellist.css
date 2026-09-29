@@ -1,0 +1,13 @@
+.hotal-list{
+   margin: 30px;
+   display: flex;
+   gap: 30px;
+
+}
+.cards{
+    width: 100%;
+    display: flex;
+    gap: 30px;
+    margin-top: 50px;
+    flex-wrap: wrap;
+}

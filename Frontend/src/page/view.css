@@ -18,9 +18,67 @@
   text-decoration: underline;
 }
 
+.hotel-view-layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 16px;
+  align-items: start;
+}
+
 .hotel-view-card {
   background: #fff;
   border: 1px solid #cfcfcf;
+}
+
+.dummy-map-wrap h2 {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.dummy-map {
+  position: relative;
+  height: 220px;
+  border: 1px solid #b5b5b5;
+  background: #d7e4d4;
+  overflow: hidden;
+}
+
+.dummy-map-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(120, 140, 120, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 140, 120, 0.35) 1px, transparent 1px),
+    linear-gradient(#c5d5c8 0%, #d7e4d4 40%, #c9d8c4 100%);
+  background-size: 28px 28px, 28px 28px, 100% 100%;
+}
+
+.dummy-map-marker {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.dummy-map-pin {
+  width: 14px;
+  height: 14px;
+  background: #c53030;
+  border: 2px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.dummy-map-label {
+  margin-top: 6px;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 2px 5px;
+  font-size: 10px;
+  white-space: nowrap;
 }
 
 .hotel-view-card img {
@@ -55,6 +113,41 @@
   max-width: 640px;
 }
 
+.hotel-view .rating {
+  background: #003580;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 32px;
+  text-align: center;
+  padding: 3px 6px;
+}
+
+.hotel-view .location {
+  color: #006ce4;
+  font-size: 13px;
+}
+
+.hotel-view-coords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: #333;
+}
+
+.hotel-view .price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #008009;
+}
+
+.hotel-view .price span {
+  font-size: 12px;
+  font-weight: 400;
+  color: #666;
+}
+
 .hotel-view-missing {
   background: #fff;
   border: 1px solid #cfcfcf;
@@ -72,7 +165,11 @@
   margin-bottom: 16px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
+  .hotel-view-layout {
+    grid-template-columns: 1fr;
+  }
+
   .hotel-view-card img {
     height: 200px;
   }

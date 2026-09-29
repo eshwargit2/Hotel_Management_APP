@@ -66,6 +66,20 @@
   background: #ddd;
 }
 
+.hotel-view-thumbs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 10px 0;
+  overflow-x: auto;
+}
+
+.hotel-view-thumbs img {
+  width: 88px;
+  height: 64px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
 .hotel-view-body {
   padding: 18px 20px 22px;
   display: flex;

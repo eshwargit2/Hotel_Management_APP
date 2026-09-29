@@ -4,12 +4,12 @@ import Nav from "../Nav";
 import Footer from "../Footer";
 import { ALL_HOTELS } from "../Hotellist";
 import HotelMap from "./HotelMap";
+import { loadExtraHotels } from "../hotelsStore";
 import "./view.css";
 
 const View = () => {
   const { id } = useParams();
-  const hotel = ALL_HOTELS.find((item) => item.id === id);
-
+  const hotel = [...loadExtraHotels(), ...ALL_HOTELS].find((item) => item.id === id);
   if (!hotel) {
     return (
       <div className="page">
@@ -39,6 +39,13 @@ const View = () => {
         <div className="hotel-view-layout">
           <article className="hotel-view-card">
             <img src={hotel.src} alt={hotel.hotelName} />
+            {hotel.images?.length > 1 && (
+              <div className="hotel-view-thumbs">
+                {hotel.images.map((src, index) => (
+                  <img key={`${hotel.id}-img-${index}`} src={src} alt={`${hotel.hotelName} ${index + 1}`} />
+                ))}
+              </div>
+            )}
             <div className="hotel-view-body">
               <div className="hotel-view-top">
                 <h1>{hotel.hotelName}</h1>

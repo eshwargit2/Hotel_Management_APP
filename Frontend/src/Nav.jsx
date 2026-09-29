@@ -14,7 +14,10 @@ const Nav = () => {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <a href="/#add">Add Hotel</a>
+            <Link to="/add">Add Hotel</Link>
+          </li>
+          <li>
+            <a href="/#update">Update Hotel</a>
           </li>
           <li>
             <a href="/#delete">Delete Hotel</a>

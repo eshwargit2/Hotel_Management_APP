@@ -7,6 +7,8 @@ import Hotellist, { ALL_HOTELS } from "./Hotellist";
 import Banner from "./Banner";
 import Footer from "./Footer";
 import View from "./page/view";
+import AddHotel from "./page/AddHotel";
+import { loadExtraHotels } from "./hotelsStore";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,8 +23,13 @@ const Home = () => {
     setMaxPrice("");
   };
 
+  const hotels = useMemo(
+    () => [...loadExtraHotels(), ...ALL_HOTELS],
+    []
+  );
+
   const filteredHotels = useMemo(() => {
-    return ALL_HOTELS.filter((hotel) => {
+    return hotels.filter((hotel) => {
       if (searchTerm.trim()) {
         const query = searchTerm.toLowerCase().trim();
         const matchesName = hotel.hotelName.toLowerCase().includes(query);
@@ -51,7 +58,7 @@ const Home = () => {
 
       return true;
     });
-  }, [searchTerm, selectedLocation, minPrice, maxPrice]);
+  }, [hotels, searchTerm, selectedLocation, minPrice, maxPrice]);
 
   return (
     <div className="page">
@@ -78,6 +85,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/add" element={<AddHotel />} />
       <Route path="/view/:id" element={<View />} />
     </Routes>
   );

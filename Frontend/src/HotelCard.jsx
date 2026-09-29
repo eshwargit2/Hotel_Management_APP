@@ -1,19 +1,26 @@
-import React from 'react'
-import './HotelCard.css'
-import HImg from  './assets/hotel.jpg'
+import React from "react";
+import "./HotelCard.css";
 
-const HotelCard = ({data}) => {
+const HotelCard = ({ data }) => {
   return (
-    <>
-    <div className='card'>
-       <img src={data.src} alt="" />
-       <div className="card-dis">
-        <h4>{data.hotelName}</h4>
-        <p>{data.description}</p>
-       </div>
-    </div>
-    </>
-  )
-}
+    <article className="card">
+      <img src={data.src} alt={data.hotelName} />
+      <div className="card-body">
+        <div className="card-top">
+          <h3>{data.hotelName}</h3>
+          <span className="rating">{data.rating}</span>
+        </div>
+        <p className="location">{data.location}</p>
+        <p className="desc">{data.description}</p>
+        <div className="card-bottom">
+          <p className="price">
+            {data.price} <span>/ night</span>
+          </p>
+          <button type="button">View</button>
+        </div>
+      </div>
+    </article>
+  );
+};
 
-export default HotelCard
+export default HotelCard;

@@ -17,10 +17,10 @@ const Nav = () => {
             <Link to="/add">Add Hotel</Link>
           </li>
           <li>
-            <a href="/#update">Update Hotel</a>
+            <Link to="/update">Update Hotel</Link>
           </li>
           <li>
-            <a href="/#delete">Delete Hotel</a>
+            <Link to="/update">Delete Hotel</Link>
           </li>
         </ul>
       </nav>

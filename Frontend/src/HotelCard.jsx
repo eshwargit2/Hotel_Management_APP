@@ -2,8 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./HotelCard.css";
 
-const HotelCard = ({ data }) => {
+const HotelCard = ({ data, onUpdate, onDelete }) => {
   const navigate = useNavigate();
+  const isManage = Boolean(onUpdate || onDelete);
 
   const openHotel = () => {
     navigate(`/view/${data.id}`);
@@ -11,16 +12,20 @@ const HotelCard = ({ data }) => {
 
   return (
     <article
-      className="card"
-      onClick={openHotel}
-      role="link"
-      tabIndex={0}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          openHotel();
-        }
-      }}
+      className={`card${isManage ? " card-manage" : ""}`}
+      onClick={isManage ? undefined : openHotel}
+      role={isManage ? "article" : "link"}
+      tabIndex={isManage ? undefined : 0}
+      onKeyDown={
+        isManage
+          ? undefined
+          : (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openHotel();
+              }
+            }
+      }
     >
       <img src={data.src} alt={data.hotelName} />
       <div className="card-body">
@@ -34,9 +39,38 @@ const HotelCard = ({ data }) => {
           <p className="price">
             {data.price} <span>/ night</span>
           </p>
-          <button type="button" onClick={openHotel}>
-            View
-          </button>
+          {isManage ? (
+            <div className="card-actions">
+              {onUpdate ? (
+                <button
+                  type="button"
+                  className="btn-update"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onUpdate(data);
+                  }}
+                >
+                  Update
+                </button>
+              ) : null}
+              {onDelete ? (
+                <button
+                  type="button"
+                  className="btn-delete"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onDelete(data);
+                  }}
+                >
+                  Delete
+                </button>
+              ) : null}
+            </div>
+          ) : (
+            <button type="button" onClick={openHotel}>
+              View
+            </button>
+          )}
         </div>
       </div>
     </article>

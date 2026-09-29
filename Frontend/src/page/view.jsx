@@ -4,12 +4,12 @@ import Nav from "../Nav";
 import Footer from "../Footer";
 import { ALL_HOTELS } from "../Hotellist";
 import HotelMap from "./HotelMap";
-import { loadExtraHotels } from "../hotelsStore";
+import { getVisibleHotels } from "../hotelsStore";
 import "./view.css";
 
 const View = () => {
   const { id } = useParams();
-  const hotel = [...loadExtraHotels(), ...ALL_HOTELS].find((item) => item.id === id);
+  const hotel = getVisibleHotels(ALL_HOTELS).find((item) => item.id === id);
   if (!hotel) {
     return (
       <div className="page">

@@ -8,7 +8,8 @@ import Banner from "./Banner";
 import Footer from "./Footer";
 import View from "./page/view";
 import AddHotel from "./page/AddHotel";
-import { loadExtraHotels } from "./hotelsStore";
+import UpdateHotel from "./page/UpdateHotel";
+import { getVisibleHotels } from "./hotelsStore";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,7 +25,7 @@ const Home = () => {
   };
 
   const hotels = useMemo(
-    () => [...loadExtraHotels(), ...ALL_HOTELS],
+    () => getVisibleHotels(ALL_HOTELS),
     []
   );
 
@@ -86,6 +87,8 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/add" element={<AddHotel />} />
+      <Route path="/update" element={<UpdateHotel />} />
+      <Route path="/update/:id" element={<AddHotel />} />
       <Route path="/view/:id" element={<View />} />
     </Routes>
   );

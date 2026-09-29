@@ -1,9 +1,16 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Nav from "../Nav";
 import Footer from "../Footer";
 import HotelMap from "./HotelMap";
-import { formatPrice, saveExtraHotel, slugifyName } from "../hotelsStore";
+import { ALL_HOTELS } from "../Hotellist";
+import {
+  formatPrice,
+  getVisibleHotels,
+  saveExtraHotel,
+  slugifyName,
+  updateHotelById,
+} from "../hotelsStore";
 import "./AddHotel.css";
 
 const emptyForm = {
@@ -18,6 +25,12 @@ const emptyForm = {
 
 const AddHotel = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const isEdit = Boolean(id);
+  const editHotel = useMemo(
+    () => (id ? getVisibleHotels(ALL_HOTELS).find((item) => item.id === id) : null),
+    [id]
+  );
   const [form, setForm] = useState(emptyForm);
   const [images, setImages] = useState([]);
   const [mapCoords, setMapCoords] = useState({
@@ -28,6 +41,29 @@ const AddHotel = () => {
   const [geoError, setGeoError] = useState(false);
   const [message, setMessage] = useState("");
   const [messageError, setMessageError] = useState(false);
+
+  useEffect(() => {
+    if (!editHotel) {
+      return;
+    }
+
+    setForm({
+      hotelName: editHotel.hotelName || "",
+      location: editHotel.location || "",
+      price: String(editHotel.price || "").replace(/[^0-9]/g, ""),
+      rating: editHotel.rating || "8.0",
+      description: editHotel.description || "",
+      latitude: String(editHotel.latitude || ""),
+      longitude: String(editHotel.longitude || ""),
+    });
+
+    const photoList = (editHotel.images?.length
+      ? editHotel.images
+      : [editHotel.src]
+    ).filter(Boolean);
+
+    setImages(photoList.map((src, index) => ({ src, name: `photo-${index + 1}` })));
+  }, [editHotel]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -116,8 +152,25 @@ const AddHotel = () => {
   };
 
   const resetForm = () => {
-    setForm(emptyForm);
-    setImages([]);
+    if (editHotel) {
+      setForm({
+        hotelName: editHotel.hotelName || "",
+        location: editHotel.location || "",
+        price: String(editHotel.price || "").replace(/[^0-9]/g, ""),
+        rating: editHotel.rating || "8.0",
+        description: editHotel.description || "",
+        latitude: String(editHotel.latitude || ""),
+        longitude: String(editHotel.longitude || ""),
+      });
+      const photoList = (editHotel.images?.length
+        ? editHotel.images
+        : [editHotel.src]
+      ).filter(Boolean);
+      setImages(photoList.map((src, index) => ({ src, name: `photo-${index + 1}` })));
+    } else {
+      setForm(emptyForm);
+      setImages([]);
+    }
     setMessage("");
     setGeoStatus("");
     setGeoError(false);
@@ -150,7 +203,7 @@ const AddHotel = () => {
     }
 
     const hotel = {
-      id: slugifyName(form.hotelName),
+      id: isEdit && editHotel ? editHotel.id : slugifyName(form.hotelName),
       hotelName: form.hotelName.trim(),
       location: form.location.trim(),
       latitude: String(lat),
@@ -162,9 +215,37 @@ const AddHotel = () => {
       images: images.map((item) => item.src),
     };
 
+    if (isEdit) {
+      updateHotelById(hotel);
+      navigate("/update");
+      return;
+    }
+
     saveExtraHotel(hotel);
     navigate(`/view/${hotel.id}`);
   };
+
+  if (isEdit && !editHotel) {
+    return (
+      <div className="page">
+        <Nav />
+        <main className="add-hotel-page">
+          <section className="add-hotel-hero">
+            <div className="add-hotel-hero-inner">
+              <h1>Hotel not found</h1>
+              <p className="lead">This listing is not available to update.</p>
+              <p>
+                <Link to="/update" className="geo-btn" style={{ display: "inline-block", lineHeight: "36px" }}>
+                  Back to hotels
+                </Link>
+              </p>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="page">
@@ -172,11 +253,12 @@ const AddHotel = () => {
       <main className="add-hotel-page">
         <section className="add-hotel-hero">
           <div className="add-hotel-hero-inner">
-            <p className="eyebrow">List a property</p>
-            <h1>Add a new hotel</h1>
+            <p className="eyebrow">{isEdit ? "Edit listing" : "List a property"}</p>
+            <h1>{isEdit ? "Update hotel" : "Add a new hotel"}</h1>
             <p className="lead">
-              Enter photos, rates and map coordinates. The live preview on the
-              right updates as you type.
+              {isEdit
+                ? "Change photos, rates or map coordinates. The live preview updates as you type."
+                : "Enter photos, rates and map coordinates. The live preview on the right updates as you type."}
             </p>
           </div>
         </section>
@@ -309,9 +391,9 @@ const AddHotel = () => {
             </div>
 
             <div className="add-hotel-actions">
-              <button type="submit">Save hotel</button>
+              <button type="submit">{isEdit ? "Save changes" : "Save hotel"}</button>
               <button type="button" className="secondary" onClick={resetForm}>
-                Clear form
+                {isEdit ? "Reset fields" : "Clear form"}
               </button>
             </div>
             {message ? (

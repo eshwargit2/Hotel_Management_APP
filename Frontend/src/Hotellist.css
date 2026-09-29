@@ -31,6 +31,58 @@
   gap: 16px;
 }
 
+.hotel-empty {
+  text-align: center;
+  padding: 40px 16px;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+
+.hotel-empty h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.hotel-empty p {
+  color: #666;
+  font-size: 13px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 24px;
+}
+
+.pagination button {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #003580;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled):not(.active) {
+  border-color: #003580;
+}
+
+.pagination button.active {
+  background: #003580;
+  border-color: #003580;
+  color: #fff;
+}
+
+.pagination button:disabled {
+  color: #999;
+  cursor: default;
+}
+
 @media (max-width: 900px) {
   .cards {
     grid-template-columns: repeat(2, 1fr);

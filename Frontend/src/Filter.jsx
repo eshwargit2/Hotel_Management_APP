@@ -33,6 +33,8 @@ const Filter = ({searchTerm,setSearchTerm,selectedLocation,setSelectedLocation,m
           <option value="yercaud">Yercaud</option>
           <option value="fairlands">Fairlands</option>
           <option value="hasthampatti">Hasthampatti</option>
+          <option value="junction">Junction</option>
+          <option value="omalur">Omalur</option>
         </select>
 
         <select

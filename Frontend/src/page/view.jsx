@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Nav from "../Nav";
 import Footer from "../Footer";
 import { ALL_HOTELS } from "../Hotellist";
+import HotelMap from "./HotelMap";
 import "./view.css";
 
 const View = () => {
@@ -26,9 +27,6 @@ const View = () => {
       </div>
     );
   }
-
-  const pinTop = `${Math.min(80, Math.max(12, (11.82 - Number(hotel.latitude)) * 380))}%`;
-  const pinLeft = `${Math.min(82, Math.max(12, (Number(hotel.longitude) - 78.12) * 620))}%`;
 
   return (
     <div className="page">
@@ -58,20 +56,17 @@ const View = () => {
             </div>
           </article>
 
-          <aside className="dummy-map-wrap">
+          <aside className="hotel-map-wrap">
             <h2>Map</h2>
-            <div className="dummy-map" aria-label="Hotel location map">
-              <div className="dummy-map-grid" />
-              <div
-                className="dummy-map-marker"
-                style={{ top: pinTop, left: pinLeft }}
-              >
-                <span className="dummy-map-pin" />
-                <span className="dummy-map-label">
-                  {hotel.latitude}, {hotel.longitude}
-                </span>
-              </div>
-            </div>
+            <HotelMap
+              latitude={hotel.latitude}
+              longitude={hotel.longitude}
+              hotelName={hotel.hotelName}
+              location={hotel.location}
+            />
+            <p className="hotel-map-note">
+              Location from OpenStreetMap for {hotel.latitude}, {hotel.longitude}
+            </p>
           </aside>
         </div>
       </main>

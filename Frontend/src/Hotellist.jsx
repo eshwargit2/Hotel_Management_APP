@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Hotellist.css";
 import HotelCard from "./HotelCard";
 
@@ -76,29 +76,148 @@ export const ALL_HOTELS = [
     description: "Simple rooms for overnight stay. Walking distance to shops.",
     src: HImg6,
   },
+  {
+    id: "hotel-shevaroys",
+    hotelName: "Hotel Shevaroys",
+    location: "Yercaud",
+    latitude: "11.7756",
+    longitude: "78.2031",
+    price: "₹5,800",
+    rating: "8.5",
+    description: "Hill hotel with restaurant and valley view rooms.",
+    src: HImg1,
+  },
+  {
+    id: "salem-gateway-inn",
+    hotelName: "Salem Gateway Inn",
+    location: "Junction, Salem",
+    latitude: "11.6698",
+    longitude: "78.1394",
+    price: "₹3,250",
+    rating: "7.8",
+    description: "Near the railway station. Early check-in on request.",
+    src: HImg2,
+  },
+  {
+    id: "omalur-road-lodge",
+    hotelName: "Omalur Road Lodge",
+    location: "Omalur Road, Salem",
+    latitude: "11.6822",
+    longitude: "78.1310",
+    price: "₹2,200",
+    rating: "7.1",
+    description: "Basic lodge with attached bath. Parking for two-wheelers.",
+    src: HImg3,
+  },
+  {
+    id: "cherry-hills-homestay",
+    hotelName: "Cherry Hills Homestay",
+    location: "Yercaud",
+    latitude: "11.7812",
+    longitude: "78.2154",
+    price: "₹7,100",
+    rating: "9.0",
+    description: "Homestay with garden, bonfire and home-cooked meals.",
+    src: HImg4,
+  },
+  {
+    id: "alagapuram-stay",
+    hotelName: "Alagapuram Stay",
+    location: "Alagapuram, Salem",
+    latitude: "11.6705",
+    longitude: "78.1598",
+    price: "₹2,650",
+    rating: "7.6",
+    description: "Family rooms close to shops and hospitals.",
+    src: HImg5,
+  },
+  {
+    id: "five-roads-residency",
+    hotelName: "Five Roads Residency",
+    location: "Five Roads, Salem",
+    latitude: "11.6602",
+    longitude: "78.1481",
+    price: "₹4,750",
+    rating: "8.3",
+    description: "Business hotel with conference hall and buffet breakfast.",
+    src: HImg6,
+  },
 ];
 
+const PAGE_SIZE = 3;
+
 const Hotellist = ({ hotels = ALL_HOTELS }) => {
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(hotels.length / PAGE_SIZE));
+
+  useEffect(() => {
+    setPage(1);
+  }, [hotels]);
+
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageHotels = hotels.slice(start, start + PAGE_SIZE);
+  const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+  const goToPage = (nextPage) => {
+    setPage(nextPage);
+    window.scrollTo({ top: 320, behavior: "smooth" });
+  };
+
   return (
     <section className="hotel-list">
       <div className="hotel-list-head">
         <h2>Hotels in Salem</h2>
-        <p>{hotels.length} {hotels.length === 1 ? "property" : "properties"} found</p>
+        <p>
+          {hotels.length} {hotels.length === 1 ? "property" : "properties"} found
+        </p>
       </div>
 
       {hotels.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "40px 16px", background: "#fff", border: "1px solid #ccc" }}>
-          <h3 style={{ fontSize: "16px", marginBottom: "8px" }}>No hotels found</h3>
-          <p style={{ color: "#666", fontSize: "13px" }}>
-            No hotels match your search criteria. Please try a different hotel name or clear the filter.
+        <div className="hotel-empty">
+          <h3>No hotels found</h3>
+          <p>
+            No hotels match your search criteria. Please try a different hotel
+            name or clear the filter.
           </p>
         </div>
       ) : (
-        <div className="cards">
-          {hotels.map((hotel) => (
-            <HotelCard key={hotel.id} data={hotel} />
-          ))}
-        </div>
+        <>
+          <div className="cards">
+            {pageHotels.map((hotel) => (
+              <HotelCard key={hotel.id} data={hotel} />
+            ))}
+          </div>
+
+          <nav className="pagination" aria-label="Hotel pages">
+            <button
+              type="button"
+              disabled={currentPage === 1}
+              onClick={() => goToPage(currentPage - 1)}
+            >
+              Prev
+            </button>
+
+            {pages.map((pageNumber) => (
+              <button
+                key={pageNumber}
+                type="button"
+                className={pageNumber === currentPage ? "active" : ""}
+                onClick={() => goToPage(pageNumber)}
+              >
+                {pageNumber}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              disabled={currentPage === totalPages}
+              onClick={() => goToPage(currentPage + 1)}
+            >
+              Next
+            </button>
+          </nav>
+        </>
       )}
     </section>
   );

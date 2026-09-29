@@ -1,12 +1,14 @@
 import React, { useState, useMemo } from "react";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Nav from "./Nav";
 import Filter from "./Filter";
 import Hotellist, { ALL_HOTELS } from "./Hotellist";
 import Banner from "./Banner";
 import Footer from "./Footer";
+import View from "./page/view";
 
-const App = () => {
+const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("");
   const [minPrice, setMinPrice] = useState("");
@@ -19,10 +21,8 @@ const App = () => {
     setMaxPrice("");
   };
 
-  // Filter hotels by search term (hotel name), location, and price range
   const filteredHotels = useMemo(() => {
     return ALL_HOTELS.filter((hotel) => {
-      // Filter by hotel name
       if (searchTerm.trim()) {
         const query = searchTerm.toLowerCase().trim();
         const matchesName = hotel.hotelName.toLowerCase().includes(query);
@@ -32,7 +32,6 @@ const App = () => {
         }
       }
 
-      // Filter by location dropdown
       if (selectedLocation) {
         const locationQuery = selectedLocation.toLowerCase();
         if (!hotel.location.toLowerCase().includes(locationQuery)) {
@@ -40,15 +39,12 @@ const App = () => {
         }
       }
 
-      // Extract numeric price (e.g. "₹4,200" -> 4200)
       const numericPrice = parseInt(hotel.price.replace(/[^0-9]/g, ""), 10);
 
-      // Filter by min price
       if (minPrice && numericPrice < parseInt(minPrice, 10)) {
         return false;
       }
 
-      // Filter by max price
       if (maxPrice && numericPrice > parseInt(maxPrice, 10)) {
         return false;
       }
@@ -60,6 +56,7 @@ const App = () => {
   return (
     <div className="page">
       <Nav />
+      <Banner />
       <Filter
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -71,10 +68,18 @@ const App = () => {
         setMaxPrice={setMaxPrice}
         onReset={handleResetFilters}
       />
-      <Banner />
       <Hotellist hotels={filteredHotels} />
       <Footer />
     </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/view/:id" element={<View />} />
+    </Routes>
   );
 };
 

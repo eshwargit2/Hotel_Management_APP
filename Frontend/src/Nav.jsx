@@ -1,22 +1,23 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Nav.css";
 
 const Nav = () => {
   return (
     <header className="site-header">
       <nav>
-        <a href="/" className="logo">
+        <Link to="/" className="logo">
           RHS
-        </a>
+        </Link>
         <ul>
           <li>
-            <a href="/">Home</a>
+            <Link to="/">Home</Link>
           </li>
           <li>
-            <a href="#add">Add Hotel</a>
+            <a href="/#add">Add Hotel</a>
           </li>
           <li>
-            <a href="#delete">Delete Hotel</a>
+            <a href="/#delete">Delete Hotel</a>
           </li>
         </ul>
       </nav>

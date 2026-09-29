@@ -1,12 +1,7 @@
 import React from "react";
 import "./Filter.css";
 
-const Filter = ({
-  searchTerm,
-  setSearchTerm,
-  selectedLocation,
-  setSelectedLocation,
-  minPrice,
+const Filter = ({searchTerm,setSearchTerm,selectedLocation,setSelectedLocation,minPrice,
   setMinPrice,
   maxPrice,
   setMaxPrice,

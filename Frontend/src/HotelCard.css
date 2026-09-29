@@ -3,6 +3,7 @@
   border: 1px solid #cfcfcf;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .card img {

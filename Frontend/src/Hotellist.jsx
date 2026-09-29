@@ -11,6 +11,7 @@ import HImg6 from "./assets/hotel6.jpg";
 
 export const ALL_HOTELS = [
   {
+    id: "grand-palace-hotel",
     hotelName: "Grand Palace Hotel",
     location: "Fairlands, Salem",
     price: "₹4,200",
@@ -19,6 +20,7 @@ export const ALL_HOTELS = [
     src: HImg1,
   },
   {
+    id: "hotel-salem-residency",
     hotelName: "Hotel Salem Residency",
     location: "New Bus Stand, Salem",
     price: "₹2,850",
@@ -27,6 +29,7 @@ export const ALL_HOTELS = [
     src: HImg2,
   },
   {
+    id: "green-valley-inn",
     hotelName: "Green Valley Inn",
     location: "Yercaud Road, Salem",
     price: "₹3,600",
@@ -35,6 +38,7 @@ export const ALL_HOTELS = [
     src: HImg3,
   },
   {
+    id: "royal-park-lodge",
     hotelName: "Royal Park Lodge",
     location: "Five Roads, Salem",
     price: "₹5,100",
@@ -43,6 +47,7 @@ export const ALL_HOTELS = [
     src: HImg4,
   },
   {
+    id: "lake-view-stay",
     hotelName: "Lake View Stay",
     location: "Yercaud",
     price: "₹6,400",
@@ -51,6 +56,7 @@ export const ALL_HOTELS = [
     src: HImg5,
   },
   {
+    id: "city-comfort-rooms",
     hotelName: "City Comfort Rooms",
     location: "Hasthampatti, Salem",
     price: "₹1,950",
@@ -78,7 +84,7 @@ const Hotellist = ({ hotels = ALL_HOTELS }) => {
       ) : (
         <div className="cards">
           {hotels.map((hotel) => (
-            <HotelCard key={hotel.hotelName} data={hotel} />
+            <HotelCard key={hotel.id} data={hotel} />
           ))}
         </div>
       )}

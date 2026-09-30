@@ -3,11 +3,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Nav from "../Nav";
 import Footer from "../Footer";
 import HotelMap from "./HotelMap";
-import { ALL_HOTELS } from "../Hotellist";
 import {
   formatPrice,
   getVisibleHotels,
-  saveExtraHotel,
   slugifyName,
   updateHotelById,
 } from "../hotelsStore";
@@ -23,16 +21,23 @@ const emptyForm = {
   longitude: "78.1460",
 };
 
+const toImageUrl = (imagePath) => {
+  if (!imagePath || imagePath.startsWith("data:") || imagePath.startsWith("http")) {
+    return imagePath || "";
+  }
+
+  return `http://localhost:5000${imagePath.startsWith("/") ? "" : "/"}${imagePath}`;
+};
+
 const AddHotel = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = Boolean(id);
-  const editHotel = useMemo(
-    () => (id ? getVisibleHotels(ALL_HOTELS).find((item) => item.id === id) : null),
-    [id]
-  );
+  const [editHotel, setEditHotel] = useState(null);
+  const [isLoadingEdit, setIsLoadingEdit] = useState(isEdit);
   const [form, setForm] = useState(emptyForm);
   const [images, setImages] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [mapCoords, setMapCoords] = useState({
     latitude: emptyForm.latitude,
     longitude: emptyForm.longitude,
@@ -41,6 +46,53 @@ const AddHotel = () => {
   const [geoError, setGeoError] = useState(false);
   const [message, setMessage] = useState("");
   const [messageError, setMessageError] = useState(false);
+
+  useEffect(() => {
+    if (!isEdit) {
+      return;
+    }
+
+    const loadHotel = async () => {
+      const localHotel = getVisibleHotels().find((item) => String(item.id) === id);
+      if (localHotel) {
+        setEditHotel(localHotel);
+        setIsLoadingEdit(false);
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:5000/hotels");
+        if (!response.ok) {
+          throw new Error("Could not load hotel");
+        }
+
+        const rows = await response.json();
+        const apiHotel = rows.find((item) => String(item.id ?? item.hotel_id) === id);
+        if (apiHotel) {
+          const source = apiHotel.image_url ?? apiHotel.image ?? apiHotel.src ?? "";
+          setEditHotel({
+            id: String(apiHotel.id ?? apiHotel.hotel_id),
+            hotelName: apiHotel.hotelName ?? apiHotel.hotel_name ?? apiHotel.name ?? "",
+            location: apiHotel.location ?? "",
+            price: String(apiHotel.price ?? ""),
+            rating: String(apiHotel.rating ?? "8.0"),
+            description: apiHotel.description ?? "",
+            latitude: String(apiHotel.latitude ?? ""),
+            longitude: String(apiHotel.longitude ?? ""),
+            src: toImageUrl(source),
+            images: source ? [toImageUrl(source)] : [],
+            source: "api",
+          });
+        }
+      } catch (error) {
+        console.error("Error loading hotel for update:", error);
+      } finally {
+        setIsLoadingEdit(false);
+      }
+    };
+
+    loadHotel();
+  }, [id, isEdit]);
 
   useEffect(() => {
     if (!editHotel) {
@@ -57,11 +109,7 @@ const AddHotel = () => {
       longitude: String(editHotel.longitude || ""),
     });
 
-    const photoList = (editHotel.images?.length
-      ? editHotel.images
-      : [editHotel.src]
-    ).filter(Boolean);
-
+    const photoList = (editHotel.images?.length ? editHotel.images : [editHotel.src]).filter(Boolean);
     setImages(photoList.map((src, index) => ({ src, name: `photo-${index + 1}` })));
   }, [editHotel]);
 
@@ -98,6 +146,7 @@ const AddHotel = () => {
 
   const readFiles = (fileList) => {
     const files = Array.from(fileList || []);
+    setSelectedFiles((prev) => [...prev, ...files]);
     files.forEach((file) => {
       if (!file.type.startsWith("image/")) {
         return;
@@ -170,6 +219,7 @@ const AddHotel = () => {
     } else {
       setForm(emptyForm);
       setImages([]);
+      setSelectedFiles([]);
     }
     setMessage("");
     setGeoStatus("");
@@ -177,7 +227,7 @@ const AddHotel = () => {
     setMessageError(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setMessage("");
     setMessageError(false);
@@ -216,14 +266,68 @@ const AddHotel = () => {
     };
 
     if (isEdit) {
-      updateHotelById(hotel);
-      navigate("/update");
+      if (editHotel.source === "api") {
+        const payload = new FormData();
+        Object.entries(hotel).forEach(([key, value]) => {
+          if (!["id", "src", "images"].includes(key)) {
+            payload.append(key, value);
+          }
+        });
+        selectedFiles.forEach((file) => payload.append("images", file));
+
+        try {
+          const response = await fetch(`http://localhost:5000/hotels/${editHotel.id}`, {
+            method: "PUT",
+            body: payload,
+          });
+          if (!response.ok) {
+            const result = await response.json().catch(() => ({}));
+            throw new Error(result.error || "Could not update hotel");
+          }
+          navigate("/update");
+        } catch (error) {
+          setMessageError(true);
+          setMessage(error.message || "Could not update hotel. Please try again.");
+        }
+      } else {
+        updateHotelById(hotel);
+        navigate("/update");
+      }
       return;
     }
 
-    saveExtraHotel(hotel);
-    navigate(`/view/${hotel.id}`);
+    const payload = new FormData();
+    payload.append("hotelName", hotel.hotelName);
+    payload.append("location", hotel.location);
+    payload.append("latitude", hotel.latitude);
+    payload.append("longitude", hotel.longitude);
+    payload.append("price", hotel.price);
+    payload.append("rating", hotel.rating);
+    payload.append("description", hotel.description);
+    selectedFiles.forEach((file) => payload.append("images", file));
+
+    try {
+      const response = await fetch("http://localhost:5000/hotels", {
+        method: "POST",
+        body: payload,
+      });
+
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || "Could not save hotel");
+      }
+
+      const savedHotel = await response.json();
+      navigate(`/view/${savedHotel.id}`);
+    } catch (error) {
+      setMessageError(true);
+      setMessage(error.message || "Could not save hotel. Please try again.");
+    }
   };
+
+  if (isEdit && isLoadingEdit) {
+    return null;
+  }
 
   if (isEdit && !editHotel) {
     return (

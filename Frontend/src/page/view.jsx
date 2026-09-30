@@ -1,15 +1,66 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Nav from "../Nav";
 import Footer from "../Footer";
-import { ALL_HOTELS } from "../Hotellist";
 import HotelMap from "./HotelMap";
 import { getVisibleHotels } from "../hotelsStore";
 import "./view.css";
 
 const View = () => {
   const { id } = useParams();
-  const hotel = getVisibleHotels(ALL_HOTELS).find((item) => item.id === id);
+  const [hotel, setHotel] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("http://localhost:5000/hotels")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Hotels request failed: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((rows) => {
+        const apiHotels = rows.map((item, index) => ({
+          id: String(item.id ?? item.hotel_id ?? `api-hotel-${index}`),
+          hotelName: item.hotelName ?? item.hotel_name ?? item.name ?? "Unnamed hotel",
+          location: item.location ?? item.address ?? "Salem",
+          latitude: String(item.latitude ?? ""),
+          longitude: String(item.longitude ?? ""),
+          price: String(item.price ?? ""),
+          rating: String(item.rating ?? ""),
+          description: item.description ?? "",
+          src: [item.src, item.image, item.image_url].find(Boolean)?.replace(
+            /^\/(uploads\/)/,
+            "http://localhost:5000/$1"
+          ) ?? "",
+          images: item.images ?? [],
+        }));
+
+        if (isMounted) {
+          const visibleHotels = getVisibleHotels(apiHotels);
+          setHotel(visibleHotels.find((item) => String(item.id) === id) ?? null);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching hotel:", error);
+        if (isMounted) {
+          setHotel(getVisibleHotels().find((item) => String(item.id) === id) ?? null);
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id]);
+
+  if (isLoading) {
+    return null;
+  }
+
   if (!hotel) {
     return (
       <div className="page">

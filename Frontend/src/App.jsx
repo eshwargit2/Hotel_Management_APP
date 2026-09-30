@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Nav from "./Nav";
 import Filter from "./Filter";
-import Hotellist, { ALL_HOTELS } from "./Hotellist";
+import Hotellist from "./Hotellist";
 import Banner from "./Banner";
 import Footer from "./Footer";
 import View from "./page/view";
@@ -16,6 +16,7 @@ const Home = () => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [apiHotels, setApiHotels] = useState(null);
 
   const handleResetFilters = () => {
     setSearchTerm("");
@@ -24,9 +25,41 @@ const Home = () => {
     setMaxPrice("");
   };
 
+  useEffect(() => {
+    fetch("http://localhost:5000/hotels")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Hotels request failed: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((rows) => {
+        const normalizedHotels = rows.map((hotel, index) => ({
+          id: hotel.id ?? hotel.hotel_id ?? `api-hotel-${index}`,
+          hotelName: hotel.hotelName ?? hotel.hotel_name ?? hotel.name ?? "Unnamed hotel",
+          location: hotel.location ?? hotel.address ?? "Salem",
+          latitude: String(hotel.latitude ?? ""),
+          longitude: String(hotel.longitude ?? ""),
+          price: String(hotel.price ?? ""),
+          rating: String(hotel.rating ?? ""),
+          description: hotel.description ?? "",
+          src: [hotel.src, hotel.image, hotel.image_url].find(Boolean)?.replace(
+            /^\/(uploads\/)/,
+            "http://localhost:5000/$1"
+          ) ?? "",
+          images: hotel.images ?? [],
+        }));
+        setApiHotels(normalizedHotels);
+      })
+      .catch((error) => {
+        console.error("Error fetching hotels:", error);
+        setApiHotels([]);
+      });
+  }, []);
+
   const hotels = useMemo(
-    () => getVisibleHotels(ALL_HOTELS),
-    []
+    () => getVisibleHotels(apiHotels ?? []),
+    [apiHotels]
   );
 
   const filteredHotels = useMemo(() => {

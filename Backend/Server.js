@@ -78,6 +78,7 @@ app.post("/hotels", upload.array("images", 10), async (req, res) => {
     const { hotelName, location, price, rating, description, latitude, longitude } = req.body;
     const files = req.files || [];
 
+    console.log(req.body);
     if (!hotelName || !location || !price || !description || !latitude || !longitude || !files.length) {
         files.forEach((file) => fs.unlinkSync(file.path));
         return res.status(400).json({ error: "Hotel details and at least one image are required" });

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { formatPrice } from "../hotelsStore";
 import "./HotelCard.css";
 
 const HotelCard = ({ data, onUpdate, onDelete }) => {
@@ -37,7 +38,7 @@ const HotelCard = ({ data, onUpdate, onDelete }) => {
         <p className="desc">{data.description}</p>
         <div className="card-bottom">
           <p className="price">
-            {data.price} <span>/ night</span>
+            {formatPrice(data.price)} <span>/ night</span>
           </p>
           {isManage ? (
             <div className="card-actions">

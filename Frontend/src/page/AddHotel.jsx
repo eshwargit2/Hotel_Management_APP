@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Nav from "../Nav";
-import Footer from "../Footer";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import HotelMap from "./HotelMap";
+import {Helmet} from "react-helmet-async";
 import {
   formatPrice,
   getVisibleHotels,
@@ -332,6 +333,14 @@ const AddHotel = () => {
   if (isEdit && !editHotel) {
     return (
       <div className="page">
+
+        <Helmet>
+        <title>Add Hotel Page </title>
+        <meta
+          name="description"
+          content="Find and manage hotels easily."
+        />
+      </Helmet>
         <Nav />
         <main className="add-hotel-page">
           <section className="add-hotel-hero">
@@ -353,6 +362,17 @@ const AddHotel = () => {
 
   return (
     <div className="page">
+      <Helmet>
+  <title>Add Hotel | RHS Hotels Management</title>
+  <meta
+    name="description"
+    content="Add new hotel information including name, location, price, rating, description, and images."
+  />
+  <meta
+    name="keywords"
+    content="add hotel, create hotel, hotel management, hotel details"
+  />
+</Helmet>
       <Nav />
       <main className="add-hotel-page">
         <section className="add-hotel-hero">

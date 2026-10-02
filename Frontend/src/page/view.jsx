@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import Nav from "../Nav";
-import Footer from "../Footer";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
 import HotelMap from "./HotelMap";
-import { getVisibleHotels } from "../hotelsStore";
+import { formatPrice, getVisibleHotels } from "../hotelsStore";
 import "./view.css";
+import { Helmet } from "react-helmet-async";
 
 const View = () => {
   const { id } = useParams();
@@ -64,6 +65,17 @@ const View = () => {
   if (!hotel) {
     return (
       <div className="page">
+        <Helmet>
+  <title>Hotels | RHS Hotels Management</title>
+  <meta
+    name="description"
+    content="Browse available hotels, locations, prices, ratings, and hotel details."
+  />
+  <meta
+    name="keywords"
+    content="hotels, hotel list, hotel rooms, hotel prices, hotel locations"
+  />
+</Helmet>
         <Nav />
         <main className="hotel-view">
           <div className="hotel-view-missing">
@@ -81,6 +93,17 @@ const View = () => {
 
   return (
     <div className="page">
+      <Helmet>
+  <title>{hotel.hotelName}</title>
+  <meta
+    name="description"
+    content={hotel.description}
+  />
+  <meta
+    name="keywords"
+    content="hotels, hotel list, hotel rooms, hotel prices, hotel locations"
+  />
+</Helmet>
       <Nav />
       <main className="hotel-view">
         <Link to="/" className="hotel-view-back">
@@ -109,7 +132,7 @@ const View = () => {
               </p>
               <p className="hotel-view-desc">{hotel.description}</p>
               <p className="price">
-                {hotel.price} <span>/ night</span>
+                {formatPrice(hotel.price)} <span>/ night</span>
               </p>
             </div>
           </article>

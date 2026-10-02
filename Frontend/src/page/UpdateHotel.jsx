@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Nav from "../Nav";
-import Footer from "../Footer";
-import HotelCard from "../HotelCard";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
+import HotelCard from "../components/HotelCard";
 import { deleteHotelById, getVisibleHotels } from "../hotelsStore";
 import "./UpdateHotel.css";
+import { Helmet } from "react-helmet-async";
 
 const toImageUrl = (imagePath) => {
   if (!imagePath || imagePath.startsWith("data:") || imagePath.startsWith("http")) {
@@ -96,6 +97,17 @@ const UpdateHotel = () => {
 
   return (
     <div className="page">
+     <Helmet>
+  <title>Update Hotel | RHS Hotels Management</title>
+  <meta
+    name="description"
+    content="Update and manage existing hotel information and details."
+  />
+  <meta
+    name="keywords"
+    content="update hotel, edit hotel, hotel management, hotel details"
+  />
+</Helmet>
       <Nav />
       <main className="update-hotel-page">
         <section className="update-hotel-hero">

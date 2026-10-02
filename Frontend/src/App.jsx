@@ -1,15 +1,16 @@
 import { useEffect, useState, useMemo } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import Nav from "./Nav";
-import Filter from "./Filter";
-import Hotellist from "./Hotellist";
-import Banner from "./Banner";
-import Footer from "./Footer";
+import Nav from "./components/Nav";
+import Filter from "./components/Filter";
+import Hotellist from "./components/Hotellist";
+import Banner from "./components/Banner";
+import Footer from "./components/Footer";
 import View from "./page/view";
 import AddHotel from "./page/AddHotel";
 import UpdateHotel from "./page/UpdateHotel";
 import { getVisibleHotels } from "./hotelsStore";
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -96,6 +97,11 @@ const Home = () => {
 
   return (
     <div className="page">
+      <Helmet>
+        <title>Home | RHS Hotels Management</title>
+           <meta name="description" content="Welcome to RHS Hotels Management. Discover and manage hotels easily."/>
+           <meta name="keywords" content="hotels, hotel management, hotel booking, RHS hotels"/>
+      </Helmet>
       <Nav />
       <Banner />
       <Filter
@@ -117,6 +123,7 @@ const Home = () => {
 
 const App = () => {
   return (
+    
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/add" element={<AddHotel />} />

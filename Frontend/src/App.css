@@ -9,7 +9,7 @@
   position: relative;
   min-height: 392px;
   padding: 38px max(6.3vw, calc((100vw - 1460px) / 2));
-  background-image: linear-gradient(90deg, rgba(0, 39, 64, .79), rgba(0, 39, 64, .35) 48%, rgba(0, 0, 0, .03)), url("./assets/banner.jpg");
+  background-image: linear-gradient(90deg, rgba(0, 24, 42, .76), rgba(0, 24, 42, .56) 55%, rgba(0, 18, 32, .38)), url("./assets/Tropical\ Infinity\ Pool\ at\ Sunset.png");
   background-position: center;
   background-size: cover;
   display: flex;

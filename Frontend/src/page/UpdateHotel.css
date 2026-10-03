@@ -5,7 +5,7 @@
 
 .update-hotel-hero {
   width: 100%;
-  min-height: 160px;
+  min-height: 190px;
   background-image: linear-gradient(rgba(0, 24, 69, 0.72), rgba(0, 24, 69, 0.72)),
     url("../assets/banner.jpg");
   background-repeat: no-repeat;
@@ -20,7 +20,7 @@
   max-width: 1100px;
   width: 100%;
   margin: 0 auto;
-  padding: 28px 16px;
+  padding: 34px 20px;
 }
 
 .update-hotel-hero-inner .eyebrow {
@@ -46,10 +46,30 @@
 }
 
 .update-hotel-list {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 16px 40px;
+  padding: 28px 20px 48px;
   width: 100%;
+}
+
+.update-hotel-page .hotel-list-head {
+  padding-left: 0;
+}
+
+.update-hotel-page .hotel-list-head::before {
+  display: none;
+}
+
+.update-hotel-page .hotel-list-head h2 {
+  font-size: 25px;
+}
+
+.delete-hotel-page .card-actions {
+  justify-content: flex-end;
+}
+
+.delete-hotel-page .card-bottom .btn-delete {
+  min-width: 104px;
 }
 
 .hotel-popup-overlay {

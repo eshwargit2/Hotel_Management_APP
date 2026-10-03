@@ -15,7 +15,7 @@ const toImageUrl = (imagePath) => {
   return `http://localhost:5000${imagePath.startsWith("/") ? "" : "/"}${imagePath}`;
 };
 
-const UpdateHotel = () => {
+const UpdateHotel = ({ deleteOnly = false }) => {
   const navigate = useNavigate();
   const [hotels, setHotels] = useState(() => getVisibleHotels());
   const [successPopup, setSuccessPopup] = useState("");
@@ -95,10 +95,12 @@ const UpdateHotel = () => {
     deleteHotel();
   };
 
+  const pageTitle = deleteOnly ? "Delete Hotel" : "Update Hotel";
+
   return (
     <div className="page">
      <Helmet>
-  <title>Update Hotel | RHS Hotels Management</title>
+  <title>{pageTitle} | RHS Hotels Management</title>
   <meta
     name="description"
     content="Update and manage existing hotel information and details."
@@ -109,14 +111,15 @@ const UpdateHotel = () => {
   />
 </Helmet>
       <Nav />
-      <main className="update-hotel-page">
+      <main className={`update-hotel-page${deleteOnly ? " delete-hotel-page" : ""}`}>
         <section className="update-hotel-hero">
           <div className="update-hotel-hero-inner">
             <p className="eyebrow">Manage listings</p>
-            <h1>Update or delete hotels</h1>
+            <h1>{deleteOnly ? "Delete a hotel" : "Update hotel details"}</h1>
             <p className="lead">
-              Every hotel card has Update and Delete. Update opens the listing
-              form. Delete removes it from this page and the home list.
+              {deleteOnly
+                ? "Choose a listing to remove it from the hotel directory."
+                : "Choose a listing to edit its photos, rates, location and details."}
             </p>
           </div>
         </section>
@@ -142,8 +145,8 @@ const UpdateHotel = () => {
                 <HotelCard
                   key={hotel.id}
                   data={hotel}
-                  onUpdate={handleUpdate}
-                  onDelete={handleDelete}
+                  onUpdate={deleteOnly ? undefined : handleUpdate}
+                  onDelete={deleteOnly ? handleDelete : undefined}
                 />
               ))}
             </div>

@@ -33,7 +33,6 @@ const HotelCard = ({ data, onUpdate, onDelete }) => {
       <div className="card-body">
         <div className="card-top">
           <h3>{data.hotelName}</h3>
-          <button className="favorite" type="button" aria-label="Save hotel" onClick={(event) => event.stopPropagation()}>♡</button>
         </div>
         <p className="location"><span>♦</span> {data.location}</p>
         <p className="desc">{data.description}</p>

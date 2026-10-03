@@ -221,7 +221,3 @@ CREATE TABLE hotel_details (
 | **DELETE** | `/hotels/:id` | Delete hotel by ID | URL parameter `:id` |
 
 ---
-
-## 📄 License
-
-This project is licensed under the ISC License.

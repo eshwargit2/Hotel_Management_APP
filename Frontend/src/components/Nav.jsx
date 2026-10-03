@@ -11,7 +11,8 @@ const Nav = () => {
     <header className="site-header">
       <nav className={isMenuOpen ? "menu-open" : ""}>
         <Link to="/" className="logo" onClick={closeMenu}>
-          RHS
+          <img src="/RHS Hotels Management Logo.png" alt="" />
+          <span><strong>RHS</strong><small>Hotels Management</small></span>
         </Link>
         <button
           type="button"
@@ -38,16 +39,16 @@ const Nav = () => {
             </button>
           </li>
           <li>
-            <Link to="/" onClick={closeMenu}>Home</Link>
+            <Link className="active" to="/" onClick={closeMenu}><span>⌂</span>Home</Link>
           </li>
           <li>
-            <Link to="/add" onClick={closeMenu}>Add Hotel</Link>
+            <Link to="/add" onClick={closeMenu}><span>✚</span>Add Hotel</Link>
           </li>
           <li>
-            <Link to="/update" onClick={closeMenu}>Update Hotel</Link>
+            <Link to="/update" onClick={closeMenu}><span>✎</span>Update Hotel</Link>
           </li>
           <li>
-            <Link to="/update" onClick={closeMenu}>Delete Hotel</Link>
+            <Link to="/update" onClick={closeMenu}><span>▣</span>Delete Hotel</Link>
           </li>
         </ul>
       </nav>

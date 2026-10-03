@@ -103,8 +103,9 @@ const Home = () => {
            <meta name="keywords" content="hotels, hotel management, hotel booking, RHS hotels"/>
       </Helmet>
       <Nav />
-      <Banner />
-      <Filter
+      <section className="home-hero">
+        <Banner />
+        <Filter
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         selectedLocation={selectedLocation}
@@ -114,7 +115,8 @@ const Home = () => {
         maxPrice={maxPrice}
         setMaxPrice={setMaxPrice}
         onReset={handleResetFilters}
-      />
+        />
+      </section>
       <Hotellist hotels={filteredHotels} />
       <Footer />
     </div>

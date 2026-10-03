@@ -1,22 +1,24 @@
-.filter {
-  background: #fff;
-  border-bottom: 1px solid #ccc;
-}
+.filter { position: absolute; z-index: 2; left: 0; right: 0; bottom: 102px; }
 
 .filter-inner {
-  max-width: 1100px;
+  max-width: 1460px;
   margin: 0 auto;
-  padding: 12px 16px;
+  padding: 12px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: nowrap;
+  gap: 12px;
   align-items: center;
+  background: #fff;
+  border: 1px solid #e0e6ed;
+  border-radius: 12px;
+  box-shadow: 0 8px 26px rgba(8, 35, 58, .2);
 }
 
 .search-input,
 .filter-inner select {
-  height: 36px;
-  border: 1px solid #999;
+  height: 50px;
+  border: 1px solid #d9e0e8;
+  border-radius: 9px;
   background: #fff;
   padding: 0 10px;
   font-size: 13px;
@@ -24,23 +26,40 @@
 }
 
 .search-input {
-  flex: 1;
+  flex: 2.1;
   min-width: 180px;
 }
 
 .filter-inner select {
   min-width: 130px;
+  flex: 1;
 }
 
 .filter-inner button {
-  height: 36px;
-  padding: 0 18px;
+  height: 50px;
+  padding: 0 26px;
+  border-radius: 9px;
   border: 0;
   background: #0071c2;
   color: #fff;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
+}
+
+@media (max-width: 850px) {
+  .filter { bottom: 95px; }
+  .filter-inner { margin: 0 18px; padding: 12px; flex-wrap: wrap; }
+  .search-input { flex-basis: 100%; }
+  .filter-inner select { flex: 1; min-width: 42%; }
+}
+
+@media (max-width: 520px) {
+  .home-hero { min-height: 590px; }
+  .filter { bottom: 122px; }
+  .filter-inner { gap: 8px; }
+  .filter-inner select { min-width: 100%; }
+  .filter-inner button { flex: 1; }
 }
 
 .filter-inner button:hover {

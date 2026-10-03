@@ -26,11 +26,12 @@ const Hotellist = ({ hotels = [] }) => {
 
   return (
     <section className="hotel-list">
-      <div className="hotel-list-head">
-        <h2>Hotels in Salem</h2>
-        <p>
-          {hotels.length} {hotels.length === 1 ? "property" : "properties"} found
-        </p>
+      <div className="hotel-list-title-row">
+        <div className="hotel-list-head">
+          <h2>Hotels in Salem</h2>
+          <p>Explore the best hotels in Salem with great amenities, comfort and value for money.</p>
+        </div>
+        <a href="#hotel-list" className="view-all-hotels">View All Hotels <span>›</span></a>
       </div>
 
       {hotels.length === 0 ? (
@@ -43,7 +44,7 @@ const Hotellist = ({ hotels = [] }) => {
         </div>
       ) : (
         <>
-          <div className="cards">
+          <div className="cards" id="hotel-list">
             {pageHotels.map((hotel) => (
               <HotelCard key={hotel.id} data={hotel} />
             ))}

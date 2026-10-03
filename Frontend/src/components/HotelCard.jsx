@@ -29,12 +29,13 @@ const HotelCard = ({ data, onUpdate, onDelete }) => {
       }
     >
       <img src={data.src} alt={data.hotelName} />
+      {!isManage && <span className="rating">★ {data.rating}</span>}
       <div className="card-body">
         <div className="card-top">
           <h3>{data.hotelName}</h3>
-          <span className="rating">{data.rating}</span>
+          <button className="favorite" type="button" aria-label="Save hotel" onClick={(event) => event.stopPropagation()}>♡</button>
         </div>
-        <p className="location">{data.location}</p>
+        <p className="location"><span>♦</span> {data.location}</p>
         <p className="desc">{data.description}</p>
         <div className="card-bottom">
           <p className="price">
@@ -68,8 +69,8 @@ const HotelCard = ({ data, onUpdate, onDelete }) => {
               ) : null}
             </div>
           ) : (
-            <button type="button" onClick={openHotel}>
-              View
+              <button type="button" onClick={openHotel}>
+              View Details <span>›</span>
             </button>
           )}
         </div>

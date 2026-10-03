@@ -100,7 +100,7 @@ const UpdateHotel = ({ deleteOnly = false }) => {
   return (
     <div className="page">
      <Helmet>
-  <title>{pageTitle} | RHS Hotels Management</title>
+  <title>Update Hotel | RHS Hotels Management</title>
   <meta
     name="description"
     content="Update and manage existing hotel information and details."

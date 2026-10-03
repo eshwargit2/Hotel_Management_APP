@@ -1,0 +1,95 @@
+Hotel Management Web Application - Project Technical Details
+
+1. PROJECT OVERVIEW
+The Hotel Management Web Application is a full-stack CRUD web application designed for browsing, searching, and managing hotels. Users can view hotel listings, search and filter by location and price range, view hotel details with interactive location maps, add new hotels with image uploads, update existing hotel information, and delete hotels.
+
+2. TECH STACK USED
+Frontend:
+- React 19: JavaScript library used for building user interfaces with reusable components.
+- Vite: Fast frontend build tool and local development server.
+- React Router DOM (v7): Client-side routing library for navigation between pages.
+- React Helmet Async: Used for handling page titles and meta descriptions for SEO.
+- Vanilla CSS: Custom CSS for layout, styling, animations, and responsive design.
+
+Backend:
+- Node.js: JavaScript runtime environment for the server.
+- Express.js: Web application framework for creating REST API endpoints.
+- Multer: Middleware used for handling multipart/form-data and saving uploaded hotel images.
+- CORS: Middleware allowing the frontend (running on port 5173) to communicate with the backend (running on port 5000).
+- Nodemon: Development tool for automatically restarting the server on file changes.
+
+Database:
+- PostgreSQL: Relational database used to store hotel details.
+- pg (node-postgres): PostgreSQL client library used for executing SQL queries using connection pooling.
+
+
+3. REACT CONCEPTS USED
+
+Components:
+The frontend is split into reusable components and pages:
+- Layout and UI Components: Nav (navigation bar), Banner (hero section), Filter (search and price filters), HotelCard (individual hotel card), Hotellist (list grid), and Footer.
+- Page Components: Home (main page), AddHotel (form to create or edit a hotel), UpdateHotel (page to select hotels for updating or deletion), HotelMap (map display), and View (modal/page showing complete hotel details).
+
+Props:
+Props are used to pass data and callback functions from parent components to child components.
+- Filter Component Props: Receives searchTerm, setSearchTerm, selectedLocation, setSelectedLocation, minPrice, setMinPrice, maxPrice, setMaxPrice, and onReset from the parent Home component.
+- Hotellist and HotelCard Props: Hotellist receives the filtered hotels array. HotelCard receives hotel data, action handlers, and boolean flags like isDeleteMode.
+- UpdateHotel Props: Receives the deleteOnly boolean prop to switch between update mode and delete mode.
+
+React Hooks Used:
+- useState: Used across components to manage local state such as form inputs, search filters, image selections, loading indicators, and messages.
+- useEffect: Used for fetching hotel data from the backend when components mount, syncing form data when editing a hotel, and cleaning up async tasks when components unmount.
+- useMemo: Used to optimize performance by calculating the filtered hotel list only when filter values or the hotel list changes.
+- useNavigate: Used to redirect users to different pages programmatically (for example, navigating back to home or to the edit form).
+- useParams: Used to extract dynamic route parameters from the URL (such as the hotel ID in /update/:id and /view/:id).
+
+JavaScript Functions and Methods:
+- Array Methods:
+  - .map(): Used to transform backend hotel objects into clean frontend models and to render arrays of JSX cards.
+  - .filter(): Used to filter hotels based on title, location, minimum price, and maximum price.
+  - .find() and .findIndex(): Used to locate specific hotels by ID for viewing or editing.
+- Asynchronous API Methods:
+  - fetch(): Used with async/await and Promises to send HTTP requests (GET, POST, PUT, DELETE) to the backend.
+  - FormData: Used to pack form text fields along with image files for multipart upload requests.
+- String and Number Utilities:
+  - .trim(), .toLowerCase(), and regular expressions: Used to clean user input and parse prices.
+  - .toLocaleString(): Formats numbers into currency format (Indian Rupees).
+- Local Storage Utilities (hotelsStore.js):
+  - localStorage.getItem() and localStorage.setItem(): Used to store offline fallback data, local edits, and deleted IDs.
+
+
+4. BACKEND DETAILS
+
+Server Setup:
+- The server runs on Node.js using Express on port 5000.
+- JSON body parsing is enabled via express.json().
+- CORS is enabled for http://localhost:5173.
+- The uploads folder is statically served at /uploads so uploaded images are accessible to the browser.
+
+File Uploads (Multer):
+- Configured using diskStorage to save uploaded images inside the Backend/uploads folder.
+- File names are sanitized and prefixed with a timestamp to avoid duplicate names.
+- File filters ensure only image formats are accepted, with a file size limit of 5MB and a limit of 10 files per request.
+
+Database Integration (PostgreSQL):
+- Connects to PostgreSQL using a connection pool (Pool from pg package).
+- Uses the table hotel_details with columns: id, name, location, latitude, longitude, price, rating, description, image_url.
+- Uses parameterized SQL queries ($1, $2, etc.) to safely insert, read, update, and delete records without SQL injection risks.
+
+REST API Endpoints:
+1. GET /hotels
+   Fetches all hotels from the database using SQL: SELECT * FROM hotel_details.
+   Returns an array of hotels with HTTP status 200.
+
+2. POST /hotels
+   Accepts multipart/form-data containing hotel details and image files.
+   Inserts a new hotel record into the database and returns the created hotel with HTTP status 201.
+   Cleans up temporary uploaded files if validation fails.
+
+3. PUT /hotels/:id
+   Accepts multipart/form-data with updated hotel fields and optional replacement images.
+   Updates the matching hotel in the database and returns the updated hotel with HTTP status 200.
+
+4. DELETE /hotels/:id
+   Deletes the hotel matching the provided ID from the database.
+   Returns the deleted hotel ID with HTTP status 200.

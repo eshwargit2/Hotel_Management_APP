@@ -65,18 +65,21 @@ const View = () => {
   if (!hotel) {
     return (
       <div className="page">
+
         <Helmet>
-  <title>Hotels | RHS Hotels Management</title>
-  <meta
-    name="description"
-    content="Browse available hotels, locations, prices, ratings, and hotel details."
-  />
-  <meta
-    name="keywords"
-    content="hotels, hotel list, hotel rooms, hotel prices, hotel locations"
-  />
-</Helmet>
+         <title>Hotels | RHS Hotels Management</title>
+           <meta
+            name="description"
+            content="Browse available hotels, locations, prices, ratings, and hotel details."
+          />
+          <meta
+            name="keywords"
+            content="hotels, hotel list, hotel rooms, hotel prices, hotel locations"
+          />
+       </Helmet>
+
         <Nav />
+
         <main className="hotel-view">
           <div className="hotel-view-missing">
             <h1>Hotel not found</h1>
@@ -86,6 +89,7 @@ const View = () => {
             </Link>
           </div>
         </main>
+        
         <Footer />
       </div>
     );

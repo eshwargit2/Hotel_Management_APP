@@ -42,7 +42,7 @@ const upload = multer({
 app.use("/uploads", express.static(uploadDirectory));
 
 
-//database connection 
+//database connection credentials
 const pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -52,6 +52,7 @@ const pool = new Pool({
 });
 
 
+//connect to the database
 pool.connect()
     .then(() => {
         console.log("PostgreSQL connected successfully");
@@ -66,7 +67,9 @@ app.get("/", (req, res) => {
 
 
 
-// Get all hotels Datas , API Path
+
+//Actual CURD Operations for Hotel Details
+// Get all hotels Datas , API endpoint - get method
 app.get("/hotels", async (req, res) => {
     try {
         const result = await pool.query("SELECT * FROM hotel_details");
@@ -83,7 +86,7 @@ app.get("/hotels", async (req, res) => {
 
 
 
-//add new hotel details , API Path
+//add new hotel details , API endpoint - post method
 app.post("/hotels", upload.array("images", 10), async (req, res) => {
     const { hotelName, location, price, rating, description, latitude, longitude } = req.body;
     const files = req.files || [];
@@ -115,7 +118,7 @@ app.post("/hotels", upload.array("images", 10), async (req, res) => {
 
 
 
-// Update hotel details , API Path
+// Update hotel details , API endpoint - put method
 app.put("/hotels/:id", upload.array("images", 10), async (req, res) => {
     const { hotelName, location, price, rating, description, latitude, longitude } = req.body;
     const files = req.files || [];
@@ -164,7 +167,7 @@ app.put("/hotels/:id", upload.array("images", 10), async (req, res) => {
 
 
 
-// Delete hotel details , API Path
+// Delete hotel details , API endpoint - delete method
 app.delete("/hotels/:id", async (req, res) => {
     try {
         const result = await pool.query(

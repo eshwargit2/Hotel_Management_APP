@@ -172,16 +172,9 @@ CREATE TABLE hotel_details (
    npm install
    ```
 
-3. Configure your PostgreSQL connection in `Backend/Server.js` (or via environment variables):
-   ```javascript
-   const pool = new Pool({
-       user: "postgres",
-       host: "localhost",
-       database: "hotel_management",
-       password: "YOUR_POSTGRES_PASSWORD",
-       port: 5432
-   });
-   ```
+3. Configure your PostgreSQL connection in `Backend/.env` using the variables shown in
+   `Backend/.env.example`. The `.env` file is ignored by Git and should contain your
+   local database password.
 
 4. Start the backend server:
    ```bash

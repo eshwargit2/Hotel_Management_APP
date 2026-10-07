@@ -1,15 +1,20 @@
 const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
+require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 
 const app = express();
 
-app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(express.json()); 
+app.use(cors({ origin: "http://localhost:5173" })); //frontend port cross origin 
 
+
+
+
+//multer configuration for file uploads
 const uploadDirectory = path.join(__dirname, "uploads");
 fs.mkdirSync(uploadDirectory, { recursive: true });
 
@@ -36,13 +41,16 @@ const upload = multer({
 
 app.use("/uploads", express.static(uploadDirectory));
 
+
+//database connection 
 const pool = new Pool({
-    user: "postgres",
-    host: "localhost",
-    database: "hotel_management",
-    password: "eshwar123",
-    port: 5432
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: Number(process.env.DB_PORT)
 });
+
 
 pool.connect()
     .then(() => {
@@ -56,6 +64,9 @@ app.get("/", (req, res) => {
     res.send("Express server is running");
 });
 
+
+
+// Get all hotels Datas , API Path
 app.get("/hotels", async (req, res) => {
     try {
         const result = await pool.query("SELECT * FROM hotel_details");
@@ -70,10 +81,9 @@ app.get("/hotels", async (req, res) => {
     }
 });
 
-app.listen(5000, () => {
-    console.log("Server running on http://localhost:5000");
-});
 
+
+//add new hotel details , API Path
 app.post("/hotels", upload.array("images", 10), async (req, res) => {
     const { hotelName, location, price, rating, description, latitude, longitude } = req.body;
     const files = req.files || [];
@@ -103,6 +113,9 @@ app.post("/hotels", upload.array("images", 10), async (req, res) => {
     }
 });
 
+
+
+// Update hotel details , API Path
 app.put("/hotels/:id", upload.array("images", 10), async (req, res) => {
     const { hotelName, location, price, rating, description, latitude, longitude } = req.body;
     const files = req.files || [];
@@ -149,6 +162,9 @@ app.put("/hotels/:id", upload.array("images", 10), async (req, res) => {
     }
 });
 
+
+
+// Delete hotel details , API Path
 app.delete("/hotels/:id", async (req, res) => {
     try {
         const result = await pool.query(
@@ -165,4 +181,9 @@ app.delete("/hotels/:id", async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Could not delete hotel" });
     }
+});
+
+
+app.listen(5000, () => {
+    console.log("Server running on http://localhost:5000");
 });

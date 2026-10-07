@@ -28,7 +28,7 @@ const Hotellist = ({ hotels = [] }) => {
     <section className="hotel-list">
       <div className="hotel-list-title-row">
         <div className="hotel-list-head">
-          <h2>Hotels in Salem</h2>
+          <h2>Hotels List</h2>
           <p>Explore the best hotels in Salem with great amenities, comfort and value for money.</p>
         </div>
         <a href="#hotel-list" className="view-all-hotels">View All Hotels <span>›</span></a>

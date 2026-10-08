@@ -104,11 +104,11 @@ const UpdateHotel = ({ deleteOnly = false }) => {
   <meta
     name="description"
     content="Update and manage existing hotel information and details."
-  />
-  <meta
+  /><meta
     name="keywords"
     content="update hotel, edit hotel, hotel management, hotel details"
   />
+  
 </Helmet>
       <Nav />
       <main className={`update-hotel-page${deleteOnly ? " delete-hotel-page" : ""}`}>
